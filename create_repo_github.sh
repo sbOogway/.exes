@@ -6,7 +6,7 @@ folder=$(basename $(pwd))
 
 echo $folder
 
-curl -u $GITHUB_USER:$GITHUB_TOKEN https://api.github.com/user/repos -d "{\"name\":\"$folder\"}"
+curl -u $GITHUB_USER:$GITHUB_TOKEN https://api.github.com/user/repos -d '{"name":"'"$folder"'", "private": true, "description": ""}'
 
 git init 
 
@@ -18,4 +18,7 @@ git commit -m "__init_repo__"
 
 git remote add origin https://github.com/$GITHUB_USER/$folder.git
 
-git push -u origin master
+git push -u origin master << EOF
+$GITHUB_USER
+$GITHUB_TOKEN
+EOF
