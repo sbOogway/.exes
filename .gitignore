@@ -1,0 +1,1 @@
+# python __pycache__/ # rust target/ # enviroment .env # log files *.log # binaries *.exe *.dll # IDEs .vscode/

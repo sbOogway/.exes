@@ -2,15 +2,33 @@
 
 # Creates a git repository in the current directory and publishes it to https://github.com
 
+help() {
+	printf "Description: creates a git repository in the current directory and publishes it to https://github.com\nUsage:\n   -d -> description for the repository. optional, requires an argument\n   -p -> sets the repo to public(default is private). optional, no argument\nInfo: author -> ElPettego https://github.com/ElPettego | year -> 2023 | license -> MIT\n"
+}
+
+description=''
+public='false'
+
+while getopts 'd:p' flag; do
+	case "${flag}" in
+		d) description="${OPTARG}" ;;
+		p) public='true' ;; 
+		*) help
+		   exit 1;;
+	esac
+done
+
 folder=$(basename $(pwd))
 
 echo $folder
 
-curl -u $GITHUB_USER:$GITHUB_TOKEN https://api.github.com/user/repos -d '{"name":"'"$folder"'", "private": true, "description": ""}'
+curl -u $GITHUB_USER:$GITHUB_TOKEN https://api.github.com/user/repos -d '{"name":"'"$folder"'", "private": true, "description": ""}' > /dev/null 2>&1
 
 git init 
 
 echo "# $folder" > README.md
+
+echo $(cat ~/.templates/.gitignore) > .gitignore
 
 git add .
 
@@ -18,7 +36,7 @@ git commit -m "__init_repo__"
 
 git remote add origin https://github.com/$GITHUB_USER/$folder.git
 
-git push -u origin master << EOF
+git push -u origin master << EOF > /dev/null 2>&1
 $GITHUB_USER
 $GITHUB_TOKEN
 EOF
