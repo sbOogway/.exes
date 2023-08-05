@@ -30,7 +30,7 @@ git init
 
 echo "# $folder" > README.md
 
-echo $(cat ~/.templates/.gitignore) >> .gitignore
+cp ~/.templates/.gitignore .gitignore
 
 git add .
 
