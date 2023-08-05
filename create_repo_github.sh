@@ -3,16 +3,18 @@
 # Creates a git repository in the current directory and publishes it to https://github.com
 
 help() {
-	printf "Description: creates a git repository in the current directory and publishes it to https://github.com\nUsage:\n   -d -> description for the repository. optional, requires an argument\n   -p -> sets the repo to public(default is private). optional, no argument\nInfo: author -> ElPettego https://github.com/ElPettego | year -> 2023 | license -> MIT\n"
+	printf "Description: creates a git repository in the current directory and publishes it to https://github.com\nUsage:\n   -d -> description for the repository. optional, requires an argument\n   -p -> sets the repo to public (default is private). optional, no argument\n   -g -> adds .gitignore (default is not added). optional, no argumentInfo: author -> ElPettego https://github.com/ElPettego | year -> 2023 | license -> MIT\n"
 }
 
 description=''
-public='false'
+public=0
+gitignore=0
 
-while getopts 'd:p' flag; do
+while getopts 'd:pg' flag; do
 	case "${flag}" in
 		d) description="${OPTARG}" ;;
-		p) public='true' ;; 
+		g) gitignore=1 ;;
+		p) public=1 ;; 
 		*) help
 		   exit 1;;
 	esac
@@ -28,7 +30,7 @@ git init
 
 echo "# $folder" > README.md
 
-echo $(cat ~/.templates/.gitignore) > .gitignore
+echo $(cat ~/.templates/.gitignore) >> .gitignore
 
 git add .
 
