@@ -2,7 +2,7 @@
 
 # Creates a git repository in the current directory and publishes it to https://github.com
 
-help() {
+function help() {
 	printf "Description: creates a git repository in the current directory and publishes it to https://github.com\nUsage:\n   -d -> description for the repository. optional, requires an argument\n   -p -> sets the repo to public (default is private). optional, no argument\n   -g -> adds .gitignore (default is not added). optional, no argumentInfo: author -> ElPettego https://github.com/ElPettego | year -> 2023 | license -> MIT\n"
 }
 
