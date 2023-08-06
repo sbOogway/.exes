@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	int  opt;
 	char *value_fg_color = NULL;
 	char *value_bg_color = NULL;
-	char* optarg = "SI";
+	// char* optarg = "SI";
 
 	while ((opt = getopt(argc, argv, "b:c:")) != -1) {
 		switch (opt) {
@@ -59,7 +59,13 @@ int main(int argc, char *argv[]) {
 		}	
 	}
 
+	printf("miao");
+
+	printf("%s", argv[argc-1]);
+
 	char* out_buffer;
+
+	
 
 	if (value_fg_color) {
 		char* color = get_color(0, RED);
