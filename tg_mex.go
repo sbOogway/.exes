@@ -9,6 +9,10 @@ import (
 
 
 func main() {
-	client := &http.Client{}
+	
+	base_url := "https://api.telegram.org/bot" 
+	client   := &http.Client{}
+
+
 
 }
