@@ -42,3 +42,5 @@ git push -u origin master << EOF > /dev/null 2>&1
 $GITHUB_USER
 $GITHUB_TOKEN
 EOF
+
+echo https://github.com/$GITHUB_USER/$folder
