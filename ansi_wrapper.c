@@ -29,39 +29,66 @@
 #define CYAN       "6"
 #define WHITE      "7"
 
-#define USAGE      "This program wraps strings with ansi codes to display them in terminal.\nFLAGS:\n	-b -> background color. requires an argument. example -> ./ansi_wrapper -b red \"SEWy sewy sewY\"\n	-c -> foreground color. requires an argument. example -> ./ansi_wrapper -c red \"SEWy sewy sewY\"\n	-g -> bold. no argument. example -> ./ansi_wrapper -g \"gas gas\"\n"
-
+#define USAGE      "This program wraps strings with ansi codes to display them in terminal.\nFlags:\n	-b -> background color. requires an argument. example -> ./ansi_wrapper -b red \"SEWy sewy sewY\"\n	-c -> foreground color. requires an argument. example -> ./ansi_wrapper -c red \"SEWy sewy sewY\"\n	-g -> bold. no argument. example -> ./ansi_wrapper -g \"gas gas\"\n	-n -> newline. no argument. example -> ./ansi_wrapper -n \"gas gas\"\n"
 
 typedef struct {
 	const char* name;
 	char* value;
 } Color;
 
-char* get_color(int fore_back, char* color) {
+char* get_color(const Color* color_map, int fore_back, char* color) {
+	char* color_value = malloc(2);
+	for (int i = 0; color_map[i].name != NULL; i++) {
+		if (strcmp(color_map[i].name, color) == 0) {
+			color_value = color_map[i].value;
+		}
+	}
 	char* buffer = malloc(20);
 	// 0 fore, 1 back
 	if (fore_back == 0) {
-		sprintf(buffer, "%s%s%s%s", ESCAPE, FOREGROUND, color, ENDLINE);
+		sprintf(buffer, "%s%s%s%s", ESCAPE, FOREGROUND, color_value, ENDLINE);
 	}
 	if (fore_back == 1) {
-		sprintf(buffer, "%s%s%s%s", ESCAPE, BACKGROUND, color, ENDLINE);
+		sprintf(buffer, "%s%s%s%s", ESCAPE, BACKGROUND, color_value, ENDLINE);
 	}
 	return buffer;
-
 }
 
-
 int main(int argc, char *argv[]) {
+	const Color color_map[] = {
+		{"red",     RED},
+		{"green",   GREEN},
+		{"yellow",  YELLOW},
+		{"blue",    BLUE},
+		{"magenta", MAGENTA},
+		{"cyan",    CYAN}, 
+		{"white",   WHITE}, 
+		{NULL, NULL}
+	}; 
+
+	// printf("%s\n", color_map[0].name);
+	// printf("%s\n", color_map[0].value);
+
 	int  opt;
 	char *value_fg_color = NULL;
 	char *value_bg_color = NULL;
-	int  is_bold = 0;
+	int  is_bold   = 0;
+	int  newline   = 0;
+	int  underline = 0;
 	// char* optarg = "SI";
 
-	while ((opt = getopt(argc, argv, "b:c:g")) != -1) {
+	while ((opt = getopt(argc, argv, "b:c:gnu")) != -1) {
 		switch (opt) {
+			case 'u':
+				underline = 1;
+				break;
+				
 			case 'g':
 				is_bold = 1;
+				break;
+			
+			case 'n':
+				newline = 1;
 				break;
 
 			case 'b':
@@ -82,31 +109,40 @@ int main(int argc, char *argv[]) {
 		}	
 	}
 
-	printf("%d", is_bold);
-
+	// printf("%d", is_bold);
 	// printf("%s", argv[argc-1]);
 
 	char* out_buffer = malloc(100);	
 
 	if (value_fg_color) {
-		char* color = get_color(0, GREEN);
-		printf("%s", value_fg_color);
-		sprintf(out_buffer, "%s%s", color, argv[argc-1]);
+		char* color = get_color(color_map, 0, value_fg_color);
+		// printf("%s", value_fg_color);
+		strcat(out_buffer, color);
+		free(color);
 	}
 
 	if (value_bg_color) {
-		char* color = get_color(1, MAGENTA);
-		sprintf(out_buffer, "%s%s", color, argv[argc-1]);
+		char* color = get_color(color_map, 1, value_bg_color);
+		strcat(out_buffer, color);
+		free(color);
 	}
 
 	if (is_bold) {
-		sprintf(out_buffer, "%s%s%s%s", ESCAPE, BOLD, ENDLINE, out_buffer);
+		char* bold = malloc(20);
+		sprintf(bold, "%s%s%s", ESCAPE, BOLD, ENDLINE);
+		strcat(out_buffer,  bold);
+		free(bold);
 	}
 
-	printf("%s%s%s%s", out_buffer, ESCAPE, RESET, ENDLINE);
+	if (newline) {
+		printf("%s%s%s\n", out_buffer, argv[argc-1], CLOSER);
+		free(out_buffer);
+		return 0;
+		
+	}
 
+	printf("%s%s%s", out_buffer, argv[argc-1], CLOSER);
 	free(out_buffer);
-
 	return 0;
 
 }
