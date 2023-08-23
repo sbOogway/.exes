@@ -45,6 +45,5 @@ int main(int argc, char* argv[])
     str exit_cmd = str(basic_log) + str(command.c_str()) + str("\")] " + emoji + str(" [$(ansi_wrapper -c yellow ") + ss.str() + str(")] ") + str(" [$(ansi_wrapper -c ") + color + str(" ") + exit_code + str(")]"));
     system(exit_cmd.c_str());
 
-
     return EXIT_SUCCESS;
 }
