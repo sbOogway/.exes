@@ -25,7 +25,6 @@ done
 
 if [ $verbosity -eq 0 ]; then
     curl https://api.telegram.org/bot$bot/sendMessage?chat_id=$chat\&text=$message > /dev/null 2>&1
-    wait
 fi
 
 if [ $verbosity -eq 1 ]; then
