@@ -1,6 +1,6 @@
+# exes in this repo
 ansi_wrapper
-tg_mex
-sus
+swg_tmr
 
 # python
 __pycache__/
@@ -19,5 +19,6 @@ target/
 *.dll
 
 # IDEs
+.vscode
 .vscode/*
 

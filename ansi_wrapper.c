@@ -134,6 +134,14 @@ int main(int argc, char *argv[]) {
 		free(bold);
 	}
 
+	if (underline) {
+		char* _underline = malloc(20);
+		sprintf(_underline, "%s%s%s", ESCAPE, UNDERLINE, ENDLINE);
+		strcat(out_buffer,  _underline);
+		free(_underline);
+
+	}
+
 	if (newline) {
 		printf("%s%s%s\n", out_buffer, argv[argc-1], CLOSER);
 		free(out_buffer);
