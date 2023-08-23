@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     std::stringstream ss;
     ss << std::fixed << std::setprecision(3) << seconds;
 
-    system("echo $?");
+    // system("echo $?");
 
     str exit_code  = utils::capture_stdout("echo -n $?", 2);
     int _exit_code = std::stoi(exit_code);
