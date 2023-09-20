@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
     str emoji   = "✅";
     str color   = "green";
     str failure = "❌";
+    str debug   = "⚠️   ";
     str basic_log = "echo $(ansi_wrapper -c $WRAP_COLOR [)$(ansi_wrapper -c $CLOCK_COLOR $(date $FORMAT))$(ansi_wrapper -c $WRAP_COLOR ]) [$(ansi_wrapper -c magenta -g swg_tmr)] [$(ansi_wrapper -c red -g -u \"";
 
     str command = "";
@@ -23,7 +24,7 @@ int main(int argc, char* argv[])
     system(entry_cmd.c_str());
 
     str start = utils::capture_stdout("date +%s%N | cut -b1-13", 2);
-    system(command.c_str());
+    int _exit_code = system(command.c_str()) / 256;
     str end   = utils::capture_stdout("date +%s%N | cut -b1-13", 2);
 
     long _start = std::stol(start);
@@ -36,13 +37,19 @@ int main(int argc, char* argv[])
 
     // system("echo $?");
 
-    str exit_code  = utils::capture_stdout("echo -n $?", 2);
-    int _exit_code = std::stoi(exit_code);
+    //str exit_code  = utils::capture_stdout("echo -n $?", 2);
+    // int _exit_code = system(command.c_str()) / 256;
+    // int _exit_code = std::stoi(exit_code);
     if (_exit_code != 0) {
         emoji = failure;
         color = "red";
+        if (_exit_code == 10) {
+            emoji = debug;
+            color = "yellow";
+        }
     }  
-    str exit_cmd = str(basic_log) + str(command.c_str()) + str("\")] " + emoji + str(" [$(ansi_wrapper -c yellow ") + ss.str() + str(")] ") + str(" [$(ansi_wrapper -c ") + color + str(" ") + exit_code + str(")]"));
+    str exit_cmd = str(basic_log) + str(command.c_str()) + str("\")] " + emoji + str(" [$(ansi_wrapper -c yellow ") + ss.str() + str(")] ") + str(" [$(ansi_wrapper -c ") + color + str(" ") + 
+    std::to_string(_exit_code) + str(")]"));
     system(exit_cmd.c_str());
 
     return EXIT_SUCCESS;
