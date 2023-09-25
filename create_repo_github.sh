@@ -26,7 +26,7 @@ echo $folder
 
 curl -u $GITHUB_USER:$GITHUB_TOKEN https://api.github.com/user/repos -d '{"name":"'"$folder"'", "private": true, "description": ""}' > /dev/null 2>&1
 
-git init 
+git init > /dev/null 2>&1 
 
 echo "# $folder" > README.md
 
@@ -36,7 +36,7 @@ git add .
 
 git commit -m "__init_repo__"
 
-git remote add origin https://github.com/$GITHUB_USER/$folder.git
+git remote add origin https://github.com/$GITHUB_USER/$folder.git > /dev/null 2>&1
 
 git push -u origin master << EOF > /dev/null 2>&1
 $GITHUB_USER
